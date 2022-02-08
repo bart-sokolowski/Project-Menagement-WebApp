@@ -1,0 +1,41 @@
+﻿@page "/Projects/delete/{Id:guid}"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+
+<style>
+
+</style>
+<div class="d-flex flex-column align-items-center justify-content-around">
+    <h3>Delete Project</h3>
+
+    <p>Name: @Project.Name</p>
+    <p>Description: @Project.Description</p>
+    <p>Id: @Project.Id</p>
+
+    <button type="button" class="btn btn-danger w-25" @onclick="DeleteProject">
+        <i class="fas fa-save"></i> Remove
+    </button>
+    <NavLink href="projects" class="btn btn-info w-25">Back</NavLink>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+    private Project Project { get; set; } = new Project();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Project = await Http.GetFromJsonAsync<Project>($"/api/Projects/{Id}");
+    }
+
+    private async void DeleteProject()
+    {
+        var response = await Http.DeleteAsync($"/api/Projects/{Project.Id}");
+        response.EnsureSuccessStatusCode();
+        Navigation.NavigateTo("/Projects");
+    }
+}

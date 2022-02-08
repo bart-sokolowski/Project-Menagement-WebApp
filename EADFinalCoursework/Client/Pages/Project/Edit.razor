@@ -1,0 +1,47 @@
+﻿@page "/Projects/edit/{Id:guid}"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+<h3>Edit Project</h3>
+
+<EditForm Model="Project" class="d-flex flex-column align-items-center justify-content-around">
+    <h3>Edit Project: @Project.Name</h3>
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label class="control-label">Name</label>
+        <InputText @bind-Value="Project.Name"></InputText>
+        <ValidationMessage For="@(() => Project.Name)" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Description</label>
+        <InputText @bind-Value="Project.Description"></InputText>
+        <ValidationMessage For="@(() => Project.Description)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-25" @onclick="HandleValidSubmit">Update</button>
+    <NavLink href="projects" class="btn btn-info w-25">Back</NavLink>
+
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+    private Project Project { get; set; } = new Project();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Project = await Http.GetFromJsonAsync<Project>($"/api/Projects/{Id}");
+    }
+
+
+    private async void HandleValidSubmit()
+    {
+        var response = await Http.PutAsJsonAsync($"/api/Projects/{Project.Id}", Project);
+        response.EnsureSuccessStatusCode();
+        Navigation.NavigateTo("/Projects");
+    }
+}

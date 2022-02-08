@@ -1,0 +1,57 @@
+﻿@page "/Projects"
+
+@inject HttpClient Http
+
+
+
+<div class="row mt-4">
+    <div class="col-8">
+        <h4 class="card-title text-info">Projects</h4>
+    </div>
+    <div class="col-2 offset-1 w-25"> 
+        <NavLink href="Projects/create" class="btn btn-info form-control">Add New Project</NavLink>
+    </div>
+</div>
+@if (projects == null)
+{
+    <p><em>There is not any projects yet</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Creation Date</th>
+                <th>Name</th>
+                <th>Id</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in projects)
+            {
+                <tr>
+                    <td>@project.Date</td>
+                    <td><a href="/Projects/details/@project.Id">@project.Name</a></td>
+                    <td>@project.Id</td>
+                    <td>@project.Description</td>
+                    <td><a class="" href="/Projects/edit/@project.Id">Edit</a></td>
+                    <td><a class="" href="/Projects/delete/@project.Id">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}
+
+@code {
+
+    private Project[] projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await Http.GetFromJsonAsync<Project[]>("/api/Projects");
+    }
+
+}

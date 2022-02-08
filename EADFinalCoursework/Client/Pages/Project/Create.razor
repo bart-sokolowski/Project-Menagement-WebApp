@@ -1,0 +1,105 @@
+﻿@page "/Projects/create"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using System.Text.Json
+
+
+
+
+<style>
+    select{
+        height:40px;
+        width:80px;
+    }
+</style>
+<div class="row mt-2 mb-5">
+    <h3 class="card-title text-info mb-3 ml-3">@Title Project</h3>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <EditForm Model="Project" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group">
+                        <label>Name</label>
+                        <InputText @bind-Value="Project.Name" class="form-control"></InputText>
+                        <ValidationMessage For="() => Project.Name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <InputTextArea @bind-Value="Project.Description" class="form-control"></InputTextArea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">@Title Project</button>
+                        <NavLink class="btn btn-primary" href="projects">Back</NavLink>
+                    </div>
+                    @if (employee != null)
+                    {
+                        <select @bind="empToAdd">
+                            @foreach (var emp in employee)
+                            {
+                                <option value="@emp.FrirstName">@emp.FrirstName</option>
+                            }
+                        </select>
+                        <button type="button" class="btn btn-info" @onclick="AddEmployee">Add Employee</button>
+                    }
+                    @if (employeeList != null)
+                    {
+                        @foreach (var emp in employeeList)
+                        {
+                            <p>@emp.FrirstName @emp.SurName <button type="button" class="btn btn-danger" @onclick=@(() =>employeeList.Remove(emp))>Delete</button></p>
+                        }
+                    }
+
+
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@code {
+
+    private List<Employee> employeeList { get; set; } = new List<Employee>();
+    private string empToAdd = "";
+    [Parameter]
+    public Guid Id { get; set; } = Guid.NewGuid();
+    private Project Project { get; set; } = new Project();
+    private Employee[] employee;
+    private string Title { get; set; } = "Create";
+
+    private async void HandleValidSubmit()
+    {
+        DateTime newProjectDate = DateTime.Now;
+        Project.Date = newProjectDate;
+        await Http.PostAsJsonAsync("/api/Projects", Project);
+        Navigation.NavigateTo("/Projects");
+       
+
+    }
+
+    private async void AddEmployee()
+    {
+        foreach(var emp in employee)
+        {
+            if(emp.FrirstName == empToAdd)
+            {
+                emp.ProjectId = Id;
+                employeeList.Add(emp);
+                var response = await Http.PutAsJsonAsync($"/api/Employees/{emp.Id}", emp);
+                response.EnsureSuccessStatusCode();
+            }
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        employee = await Http.GetFromJsonAsync<Employee[]>("/api/Employees");
+        Project.Id = Id;
+    }
+
+
+
+}

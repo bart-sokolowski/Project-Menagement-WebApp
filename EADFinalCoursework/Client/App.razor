@@ -1,0 +1,147 @@
+@inject HttpClient Http
+
+<Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p>Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+
+
+@code{
+    //public static Dictionary<Guid, Company> Companies = new Dictionary<Guid, Company>();
+    //public static Dictionary<Guid, Employee> Employees = new Dictionary<Guid, Employee>();
+
+    //private Company[] company;  Company Get Task Returns Text/Html insead of Application/Json
+    private Employee[] employee;
+
+    Company company1 = new Company()
+    {
+        Id = Guid.NewGuid(),
+        Name = "Company1",
+        Email = "Company1@gmail.com"
+    };
+    Company company2 = new Company()
+    {
+        Id = Guid.NewGuid(),
+        Name = "Company2",
+        Email = "Company2@gmail.com"
+    };
+    Company company3 = new Company()
+    {
+        Id = Guid.NewGuid(),
+        Name = "Company3",
+        Email = "Company3@gmail.com"
+    };
+    Company company4 = new Company()
+    {
+        Id = Guid.NewGuid(),
+        Name = "Company4",
+        Email = "Company4@gmail.com"
+    };
+    Company company5 = new Company()
+    {
+        Id = Guid.NewGuid(),
+        Name = "Company5",
+        Email = "Company5@gmail.com"
+    };
+
+
+    Employee employee1 = new Employee()
+    {
+        Id = Guid.NewGuid(),
+        FrirstName = "John",
+        SurName = "Smith",
+        Email = "employee1@gmail.com",
+        PhoneNumber = "07735092785"
+    };
+    Employee employee2 = new Employee()
+    {
+        Id = Guid.NewGuid(),
+        FrirstName = "Maria",
+        SurName = "Johnson",
+        Email = "employee2@gmail.com",
+        PhoneNumber = "07835096724"
+    };
+    Employee employee3 = new Employee()
+    {
+        Id = Guid.NewGuid(),
+        FrirstName = "Mark",
+        SurName = "Rownling",
+        Email = "employee3@gmail.com",
+        PhoneNumber = "07755072745"
+    };
+    Employee employee4 = new Employee()
+    {
+        Id = Guid.NewGuid(),
+        FrirstName = "Jack",
+        SurName = "Bonet",
+        Email = "employee4@gmail.com",
+        PhoneNumber = "07778090735"
+    };
+    Employee employee5 = new Employee()
+    {
+        Id = Guid.NewGuid(),
+        FrirstName = "Anna",
+        SurName = "Hendricks",
+        Email = "employee5@gmail.com",
+        PhoneNumber = "07130892395"
+    };
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //company = await Http.GetFromJsonAsync<Company[]>("/api/Companies");
+        employee = await Http.GetFromJsonAsync<Employee[]>("/api/Employees");
+        //if (company == null)
+        //{
+        //    await Http.PostAsJsonAsync("/api/Companies", company1);
+        //    await Http.PostAsJsonAsync("/api/Companies", company2);
+        //    await Http.PostAsJsonAsync("/api/Companies", company3);
+        //    await Http.PostAsJsonAsync("/api/Companies", company4);
+        //    await Http.PostAsJsonAsync("/api/Companies", company5);
+        //}
+
+        if (employee == null)
+        {
+            await Http.PostAsJsonAsync("/api/Employees", employee1);
+            await Http.PostAsJsonAsync("/api/Employees", employee2);
+            await Http.PostAsJsonAsync("/api/Employees", employee3);
+            await Http.PostAsJsonAsync("/api/Employees", employee4);
+            await Http.PostAsJsonAsync("/api/Employees", employee5);
+        }
+
+
+        //Companies.Add(company1.Id, company1);
+        //Companies.Add(company2.Id, company2);
+        //Companies.Add(company3.Id, company3);
+        //Companies.Add(company4.Id, company4);
+        //Companies.Add(company5.Id, company5);
+        //Employees.Add(employee1.Id, employee1);
+        //Employees.Add(employee2.Id, employee1);
+        //Employees.Add(employee3.Id, employee1);
+        //Employees.Add(employee4.Id, employee1);
+        //Employees.Add(employee5.Id, employee1);
+
+        //foreach(var company in Companies)
+        //{
+        //    await Http.PostAsJsonAsync("/api/Companies", company);
+        //}
+        //foreach (var employee in Employees)
+        //{
+        //    await Http.PostAsJsonAsync("/api/Companies", employee);
+
+        //}
+    }
+
+
+
+
+}
+

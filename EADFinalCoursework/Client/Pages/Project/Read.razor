@@ -1,0 +1,193 @@
+﻿@page "/Projects/details/{Id:guid}"
+@*@attribute [Authorize]*@
+@inject HttpClient Http
+
+
+<style>
+    .lightgray{
+        color:dimgray;
+    }
+    .group-list{
+        border-bottom: 1px solid gray;
+        border-radius: 5px;
+        margin: 5px;
+        padding:5px;
+        list-style:none;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+    }
+    .darkbackground{
+        background-color: bisque;
+    }
+    .employee-container{
+        margin:30px;
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        justify-content:space-around;
+    }
+
+    .ticket-container{
+        display:flex;
+        justify-content:space-around;
+        margin-top:80px;
+    }
+    .update-ticket{
+        list-style:none;
+    }
+    .ul-width{
+        display:flex;
+        flex-direction:column;
+    }
+    .individual-ticket {
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:space-around;
+        border: 1px solid gray;
+        border-radius: 8px;
+        width: 200px;
+        height:300px;
+        padding: auto;
+        text-align: center;
+    }
+    input[type=text] {
+        border: none;
+        border-bottom: 2px solid red;
+        width: 90%;
+    }
+        input[type=text]:focus {
+            border: 1px solid red;
+            background-color: pink;
+
+        }
+</style>
+<div class="d-flex flex-column text-center align-items-center justify-content-around">
+    <h2>@project.Name</h2>
+    <h4>@project.Description</h4>
+    <h3>Id: @project.Id</h3>
+    @if (employee != null)          
+    {
+        <div class="vw-100">
+            <h4>Employees assigned to a project</h4>
+            <hr />
+            <div class="">
+                <ul class="employee-container">
+                    @foreach (var emp in employee)
+                    {
+                        @if (emp.ProjectId == Id)
+                        {
+                    <li class="group-list lightgray">
+                        <h5>@emp.FrirstName @emp.SurName </h5>
+                        @emp.PhoneNumber <br />
+                        @emp.Email
+                        <button class="btn btn-danger " type="button" @onclick="()=> DeleteEmployee(emp)">&times;</button>
+                    </li>
+
+                        }
+
+                    }
+                </ul>
+            </div>
+            <hr />
+        </div>
+    }
+
+
+    <div class="col-3  text-center">
+        <NavLink href="projects" class="btn-light btn m-3 w-50">Back</NavLink>
+        <a href="/Projects/details/@Id/createTicket" class="btn btn-info form-control">Add Ticket</a>
+        <button type="button" class="btn btn-primary w-75 m-3" @onclick="SaveChanges">Save Changes</button>
+    </div>
+</div>   
+    
+    <hr />
+    <div class="ticket-container ">
+        @if (tickets != null)
+        {
+
+            @foreach (var ticket in tickets)
+            {
+                if (Id.Equals(ticket.ProjectId))
+                {
+                    <div class="d-flex justify-content-around">
+                        <div class="individual-ticket">
+                            <p class="card-title text-muted">@ticket.Name</p>
+                            <p class="card-text">@ticket.Description</p>
+                            <div>
+                                <label>Edit</label>
+                                <input type="checkbox" @bind-value="IsActive" checked="@(IsActive?"checked":null)" />
+                            </div>
+                            <button type="button" class="btn btn-danger w-100" @onclick="() => DeleteTicket(ticket)">Delete</button>
+                            @if (IsActive)
+                            {
+                                <ul class="ul-width">
+                                    <li class="update-ticket">
+                                        <input type="text" @bind-value="ticket.Name" @bind-value:event="oninput" />
+                                    </li>
+
+                                    <li class="update-ticket">
+                                        <input type="text" @bind-value="ticket.Description" @bind-value:event="oninput" />
+                                    </li>
+                                </ul>
+                            }
+
+
+                        </div>
+                    </div>
+                }
+
+            }
+        }
+        else
+        {
+            <h3>This Project has no Tickets yet</h3>
+        }
+
+
+    </div>
+
+    @code {
+
+
+        private bool IsActive = false;
+        [Parameter]
+        public Guid Id { get; set; }
+
+        private Project project { get; set; } = new Project();
+        private Ticket[] tickets;
+        private Employee[] employee;
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            project = await Http.GetFromJsonAsync<Project>($"/api/Projects/{Id}");
+            tickets = await Http.GetFromJsonAsync<Ticket[]>("/api/Tickets");
+            employee = await Http.GetFromJsonAsync<Employee[]>("/api/Employees");
+        }
+
+        private async void DeleteTicket(Ticket ticket)
+        {
+            await Http.DeleteAsync($"/api/Tickets/{ticket.Id}");
+        }
+
+        private async void DeleteEmployee(Employee employee)
+        {
+            employee.ProjectId = new Guid();
+            await Http.PutAsJsonAsync($"/api/Employees/{employee.Id}", employee);
+
+        }
+
+        private async void SaveChanges()
+        {
+
+            foreach(var ticket in tickets)
+            {
+                await Http.PutAsJsonAsync($"/api/Tickets/{ticket.Id}", ticket);
+            }
+
+        }
+
+
+    }

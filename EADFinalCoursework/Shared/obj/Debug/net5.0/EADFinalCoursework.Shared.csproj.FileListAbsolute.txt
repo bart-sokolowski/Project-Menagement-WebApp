@@ -1,0 +1,15 @@
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\bin\Debug\net5.0\EADFinalCoursework.Shared.deps.json
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\bin\Debug\net5.0\EADFinalCoursework.Shared.runtimeconfig.json
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\bin\Debug\net5.0\EADFinalCoursework.Shared.runtimeconfig.dev.json
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\bin\Debug\net5.0\EADFinalCoursework.Shared.dll
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\bin\Debug\net5.0\ref\EADFinalCoursework.Shared.dll
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\bin\Debug\net5.0\EADFinalCoursework.Shared.pdb
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\obj\Debug\net5.0\EADFinalCoursework.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\obj\Debug\net5.0\EADFinalCoursework.Shared.AssemblyInfoInputs.cache
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\obj\Debug\net5.0\EADFinalCoursework.Shared.AssemblyInfo.cs
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\obj\Debug\net5.0\EADFinalCoursework.Shared.csproj.CoreCompileInputs.cache
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\obj\Debug\net5.0\EADFinalCoursework.Shared.dll
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\obj\Debug\net5.0\ref\EADFinalCoursework.Shared.dll
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\obj\Debug\net5.0\EADFinalCoursework.Shared.pdb
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\obj\Debug\net5.0\EADFinalCoursework.Shared.genruntimeconfig.cache
+C:\Users\bar77\source\repos\EADFinalCoursework\EADFinalCoursework\Shared\obj\Debug\net5.0\EADFinalCoursework.Shared.csproj.AssemblyReference.cache

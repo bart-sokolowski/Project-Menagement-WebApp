@@ -1,0 +1,58 @@
+﻿@page "/Projects/details/{Id:guid}/createTicket"
+
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using System.Text.Json
+
+
+
+
+
+<div class="row mt-2 mb-5">
+    <h3 class="card-title text-info mb-3 ml-3">Create Ticket</h3>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <EditForm Model="ticket" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group">
+                        <label>Name</label>
+                        <InputText @bind-Value="ticket.Name" class="form-control"></InputText>
+                        <ValidationMessage For="() => ticket.Name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <InputTextArea @bind-Value="ticket.Description" class="form-control"></InputTextArea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                        <NavLink class="btn btn-primary" href="projects">Back</NavLink>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+    private Ticket ticket { get; set; } = new Ticket();
+    private Project project { get; set; } = new Project();
+
+    protected override async Task OnInitializedAsync()
+    {
+        project = await Http.GetFromJsonAsync<Project>($"/api/Projects/{Id}");
+    }
+
+    private async void HandleValidSubmit()
+    {
+        ticket.ProjectId = project.Id;
+        await Http.PostAsJsonAsync("/api/Tickets", ticket);
+        Navigation.NavigateTo($"/Projects/details/{Id}");
+    }
+}
